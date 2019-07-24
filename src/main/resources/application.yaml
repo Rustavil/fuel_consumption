@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+#Database
+  datasource:
+    url: jdbc:h2:mem:db
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+  h2:
+    console:
+      enabled: true
+
+#Mail
+  mail:
+    host: smtp.gmail.com
+    username: noreply@gmail.com
+    password: password
+    port: 587
+    properties.mail.smtp.starttls.enable: true
+app:
+  mail:
+    sender: noreply@gmail.com
+    receivers: contributer1@gmail.com, contributer2@gmail.com
