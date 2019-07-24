@@ -2,6 +2,7 @@ package ru.rustavil.fuel_consumption.rest.dto;
 
 import ru.rustavil.fuel_consumption.domain.FuelType;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class MonthFuelConsumptionResponseDto {
@@ -9,13 +10,15 @@ public class MonthFuelConsumptionResponseDto {
     private LocalDate date;
     private FuelType fuelType;
     private Double fuelVolume;
-    private Double totalFuelPrice;
-    private Double avgFuelPrice;
+    private BigDecimal totalFuelPrice;
+    private BigDecimal avgFuelPrice;
 
     public MonthFuelConsumptionResponseDto() {
     }
 
-    public MonthFuelConsumptionResponseDto(int year, int mont, FuelType fuelType, Double fuelVolume, Double totalFuelPrice, Double avgFuelPrice) {
+    public MonthFuelConsumptionResponseDto(int year, int mont,
+                                           FuelType fuelType, Double fuelVolume,
+                                           BigDecimal totalFuelPrice, BigDecimal avgFuelPrice) {
         this.date = LocalDate.of(year, mont, 1);
         this.fuelType = fuelType;
         this.fuelVolume = fuelVolume;
@@ -47,19 +50,11 @@ public class MonthFuelConsumptionResponseDto {
         this.fuelVolume = fuelVolume;
     }
 
-    public Double getTotalFuelPrice() {
+    public BigDecimal getTotalFuelPrice() {
         return totalFuelPrice;
     }
 
-    public void setTotalFuelPrice(Double totalFuelPrice) {
+    public void setTotalFuelPrice(BigDecimal totalFuelPrice) {
         this.totalFuelPrice = totalFuelPrice;
-    }
-
-    public Double getAvgFuelPrice() {
-        return avgFuelPrice;
-    }
-
-    public void setAvgFuelPrice(Double avgFuelPrice) {
-        this.avgFuelPrice = avgFuelPrice;
     }
 }

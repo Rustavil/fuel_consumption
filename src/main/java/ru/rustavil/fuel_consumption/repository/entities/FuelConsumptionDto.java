@@ -3,7 +3,9 @@ package ru.rustavil.fuel_consumption.repository.entities;
 import ru.rustavil.fuel_consumption.domain.FuelType;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +20,7 @@ public class FuelConsumptionDto {
     private DriverDto driver;
     private FuelType fuelType;
     private Double fuelVolume;
-    private Double fuelPrice;
+    private BigDecimal fuelPrice;
     private LocalDate created;
 
     public FuelConsumptionDto() {
@@ -26,7 +28,7 @@ public class FuelConsumptionDto {
         this.created = LocalDate.now();
     }
 
-    public FuelConsumptionDto(DriverDto driver, FuelType fuelType, Double fuelVolume, Double fuelPrice) {
+    public FuelConsumptionDto(DriverDto driver, FuelType fuelType, Double fuelVolume, BigDecimal fuelPrice) {
         this.id = UUID.randomUUID();
         this.driver = driver;
         this.fuelType = fuelType;
@@ -35,7 +37,7 @@ public class FuelConsumptionDto {
         this.created = LocalDate.now();
     }
 
-    public FuelConsumptionDto(DriverDto driver, FuelType fuelType, Double fuelVolume, Double fuelPrice, LocalDate created) {
+    public FuelConsumptionDto(DriverDto driver, FuelType fuelType, Double fuelVolume, BigDecimal fuelPrice, LocalDate created) {
         this.id = UUID.randomUUID();
         this.driver = driver;
         this.fuelType = fuelType;
@@ -76,11 +78,11 @@ public class FuelConsumptionDto {
         this.fuelVolume = fuelVolume;
     }
 
-    public Double getFuelPrice() {
+    public BigDecimal getFuelPrice() {
         return fuelPrice;
     }
 
-    public void setFuelPrice(Double fuelPrice) {
+    public void setFuelPrice(BigDecimal fuelPrice) {
         this.fuelPrice = fuelPrice;
     }
 
@@ -90,5 +92,23 @@ public class FuelConsumptionDto {
 
     public void setCreated(LocalDate created) {
         this.created = created;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FuelConsumptionDto that = (FuelConsumptionDto) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(driver, that.driver) &&
+                fuelType == that.fuelType &&
+                Objects.equals(fuelVolume, that.fuelVolume) &&
+                Objects.equals(fuelPrice, that.fuelPrice) &&
+                Objects.equals(created, that.created);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, driver, fuelType, fuelVolume, fuelPrice, created);
     }
 }

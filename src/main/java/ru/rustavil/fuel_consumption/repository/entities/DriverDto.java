@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -45,4 +46,17 @@ public class DriverDto {
         this.identifier = identifier;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DriverDto driverDto = (DriverDto) o;
+        return Objects.equals(id, driverDto.id) &&
+                Objects.equals(identifier, driverDto.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, identifier);
+    }
 }

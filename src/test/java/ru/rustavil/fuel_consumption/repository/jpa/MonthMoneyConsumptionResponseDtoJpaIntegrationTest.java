@@ -15,6 +15,7 @@ import ru.rustavil.fuel_consumption.repository.entities.DriverDto;
 import ru.rustavil.fuel_consumption.repository.entities.FuelConsumptionDto;
 import ru.rustavil.fuel_consumption.repository.entities.MonthMoneyConsumptionDto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,15 +44,15 @@ public class MonthMoneyConsumptionResponseDtoJpaIntegrationTest {
     @Test
     public void whenInvokeCalculateMonthsMoneyConsumptionByDriverIdentifierThenExpected() {
         Page<MonthMoneyConsumptionDto> got = fuelConsumptionRepositoryJpa.calculateMonthsMoneyConsumptionByDriverId(driverDtoList[0].getId(), PageRequest.of(0, 2));
-        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, 4000),
-                new MonthMoneyConsumptionDto(2019,7, 6000));
+        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, BigDecimal.valueOf(400000, 2)),
+                new MonthMoneyConsumptionDto(2019,7, BigDecimal.valueOf(600000, 2)));
     }
 
     @Test
     public void whenInvokeCalculateMonthsMoneyConsumptionByThenExpected() {
         Page<MonthMoneyConsumptionDto> got = fuelConsumptionRepositoryJpa.calculateMonthsMoneyConsumption(PageRequest.of(0, 2));
-        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, 12000),
-                new MonthMoneyConsumptionDto(2019,7, 8000));
+        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, BigDecimal.valueOf(1200000, 2)),
+                new MonthMoneyConsumptionDto(2019,7, BigDecimal.valueOf(800000, 2)));
     }
 
     @After
@@ -79,14 +80,14 @@ public class MonthMoneyConsumptionResponseDtoJpaIntegrationTest {
 
     private void saveFuelConsumptions() {
         fuelConsumptionDtoList = new FuelConsumptionDto[]{
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 100.50, 2000.0, LocalDate.of(2019, 7, 1)),
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 300.50, 4000.0, LocalDate.of(2019, 7, 2)),
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_D, 100.50, 2000.0, LocalDate.of(2019, 7, 2)),
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 300.50, 4000.0, LocalDate.of(2019, 6, 1))};
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_95, 100.50, BigDecimal.valueOf(2000.0), LocalDate.of(2019, 6, 1)),
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_98, 100.50, BigDecimal.valueOf(2000.0), LocalDate.of(2019, 6, 2)),
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 100.50, BigDecimal.valueOf(2000.0), LocalDate.of(2019, 7, 1)),
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 300.50, BigDecimal.valueOf(4000.0), LocalDate.of(2019, 7, 2)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 100.50, BigDecimal.valueOf(2000.0), LocalDate.of(2019, 6, 1)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_98, 100.50, BigDecimal.valueOf(2000.0), LocalDate.of(2019, 6, 2)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_D, 100.50, BigDecimal.valueOf(2000.0), LocalDate.of(2019, 7, 2)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 300.50, BigDecimal.valueOf(4000.0), LocalDate.of(2019, 6, 1))};
 
         for (FuelConsumptionDto fuelConsumptionDto : fuelConsumptionDtoList) {
             entityManager.persistAndFlush(fuelConsumptionDto);

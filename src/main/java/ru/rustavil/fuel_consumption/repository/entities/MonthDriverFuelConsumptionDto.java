@@ -2,6 +2,8 @@ package ru.rustavil.fuel_consumption.repository.entities;
 
 import ru.rustavil.fuel_consumption.domain.FuelType;
 
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -11,12 +13,13 @@ public class MonthDriverFuelConsumptionDto {
     private Long driverIdentifier;
     private FuelType fuelType;
     private Double fuelVolume;
-    private Double fuelPrice;
+    @Digits(integer=5, fraction=2)
+    private BigDecimal fuelPrice;
 
     public MonthDriverFuelConsumptionDto() {
     }
 
-    public MonthDriverFuelConsumptionDto(int year, int mont, Long driverIdentifier, FuelType fuelType, Double fuelVolume, Double fuelPrice) {
+    public MonthDriverFuelConsumptionDto(int year, int mont, Long driverIdentifier, FuelType fuelType, Double fuelVolume, BigDecimal fuelPrice) {
         this.date = LocalDate.of(year, mont, 1);
         this.driverIdentifier = driverIdentifier;
         this.fuelType = fuelType;
@@ -56,11 +59,11 @@ public class MonthDriverFuelConsumptionDto {
         this.fuelVolume = fuelVolume;
     }
 
-    public Double getFuelPrice() {
+    public BigDecimal getFuelPrice() {
         return fuelPrice;
     }
 
-    public void setFuelPrice(Double fuelPrice) {
+    public void setFuelPrice(BigDecimal fuelPrice) {
         this.fuelPrice = fuelPrice;
     }
 

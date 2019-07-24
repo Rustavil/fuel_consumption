@@ -1,19 +1,22 @@
 package ru.rustavil.fuel_consumption.repository.entities;
 
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class MonthMoneyConsumptionDto {
 
     private LocalDate date;
-    private double value;
+    @Digits(integer = 5, fraction = 2)
+    private BigDecimal money;
 
     public MonthMoneyConsumptionDto() {
     }
 
-    public MonthMoneyConsumptionDto(int year, int month, double value) {
+    public MonthMoneyConsumptionDto(int year, int month, BigDecimal money) {
         this.date = LocalDate.of(year, month, 1);
-        this.value = value;
+        this.money = money;
     }
 
     public LocalDate getDate() {
@@ -24,12 +27,12 @@ public class MonthMoneyConsumptionDto {
         this.date = date;
     }
 
-    public double getValue() {
-        return value;
+    public BigDecimal getMoney() {
+        return money;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setMoney(BigDecimal money) {
+        this.money = money;
     }
 
     @Override
@@ -37,12 +40,12 @@ public class MonthMoneyConsumptionDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MonthMoneyConsumptionDto that = (MonthMoneyConsumptionDto) o;
-        return Double.compare(that.value, value) == 0 &&
-                Objects.equals(date, that.date);
+        return Objects.equals(date, that.date) &&
+                Objects.equals(money, that.money);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, value);
+        return Objects.hash(date, money);
     }
 }
