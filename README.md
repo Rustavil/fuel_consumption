@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/Rustavil/fuel_consumption.svg?branch=master)](https://travis-ci.com/Rustavil/fuel_consumption)
+
 # Fuel consumption application
 
 You are assigned to create a fuel consumption management application for a small transport company. It should be possible to report purchased fuel volumes and retrieve the already inserted information by other contributors. The application initially will have only RESTful API with JSON payloads in response, but won't be limited only to this interface in the future. The fuel consumption data should be stored locally in the file or in an embedded database, but it should be possible later to swap current data storage to something else (MySql, Oracle DB etc).
