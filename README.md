@@ -33,9 +33,12 @@ Automated test usadge, not only unit tests but another kinds also. Aplly best br
 Business logic should be implemented using object orient design and domain driven design principles
 
 ## Testing:
-Execute unit tests:
 ```
 mvt test
+```
+Execute unit tests:
+```
+mvt test -Punit
 ```
 Execute integration test:
 ```
