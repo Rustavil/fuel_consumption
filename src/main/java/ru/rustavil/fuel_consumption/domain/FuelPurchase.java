@@ -1,9 +1,7 @@
 package ru.rustavil.fuel_consumption.domain;
 
 
-import ru.rustavil.fuel_consumption.domain.exceptions.EmptyFuelConsumptionException;
-import ru.rustavil.fuel_consumption.domain.exceptions.MinimalFuelVolumeException;
-import ru.rustavil.fuel_consumption.domain.exceptions.RequiredDriverException;
+import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -11,17 +9,19 @@ import java.util.stream.Collectors;
 
 public class FuelPurchase {
 
-    private static final long MIN_REGISTRATION_FUEL_VOLUME = 1;
-    private List<FuelConsumption> fuelConsumptionList;
-
-    public FuelPurchase() {
-    }
+    private final List<FuelConsumption> fuelConsumptionList;
 
     public FuelPurchase(FuelConsumption fuelConsumption) {
+        if (Objects.isNull(fuelConsumption)) {
+            throw new InvalidException("Fuel consumption empty");
+        }
         this.fuelConsumptionList = Collections.singletonList(fuelConsumption);
     }
 
     public FuelPurchase(List<FuelConsumption> fuelConsumptionList) {
+        if (Objects.isNull(fuelConsumptionList) || fuelConsumptionList.isEmpty()) {
+            throw new InvalidException("Fuel consumption empty");
+        }
         this.fuelConsumptionList = fuelConsumptionList;
     }
 
@@ -39,20 +39,6 @@ public class FuelPurchase {
 
     public BigDecimal getTotalPrice() {
         return this.fuelConsumptionList.stream().map(FuelConsumption::getFuelPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public void IsCanRegister() {
-        if (Objects.isNull(this.fuelConsumptionList) || this.fuelConsumptionList.isEmpty()) {
-            throw new EmptyFuelConsumptionException();
-        }
-        for (FuelConsumption fuelConsumption: this.fuelConsumptionList) {
-            if (Objects.isNull(fuelConsumption.getDriver())) {
-                throw new RequiredDriverException();
-            }
-            if (fuelConsumption.getFuelVolume() < MIN_REGISTRATION_FUEL_VOLUME) {
-                throw new MinimalFuelVolumeException(String.format("Minimal registration volume %d", MIN_REGISTRATION_FUEL_VOLUME));
-            }
-        }
     }
 
 }

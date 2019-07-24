@@ -37,31 +37,12 @@ public class MonthFuelConsumptionResponseDtoJpaIntegrationTest {
         assertThat(entityManager).isNotNull();
         assertThat(fuelConsumptionRepositoryJpa).isNotNull();
 
-        driverDtoList = new DriverDto[]{
-                new DriverDto(111111L),
-                new DriverDto(222222L)
-        };
-        for (DriverDto driverDto : driverDtoList) {
-            entityManager.persistAndFlush(driverDto);
-        }
-        fuelConsumptionDtoList = new FuelConsumptionDto[]{
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 100.50, 2000.0, LocalDate.of(2019, 7, 1)),
-                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 300.50, 4000.0, LocalDate.of(2019, 7, 2)),
-
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_D, 100.50, 2000.0, LocalDate.of(2019, 7, 2)),
-                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 300.50, 4000.0, LocalDate.of(2019, 6, 1))};
-
-        for (FuelConsumptionDto fuelConsumptionDto : fuelConsumptionDtoList) {
-            entityManager.persistAndFlush(fuelConsumptionDto);
-        }
+        saveDrivers();
+        saveFuelConsumptions();
     }
 
     @Test
-    public void calculateFuelConsumptionByMonth() {
+    public void whenInvokeCalculateFuelConsumptionByMonthThenExpected() {
         Page<MonthFuelConsumptionDto>  found = fuelConsumptionRepositoryJpa.calculateMonthFuelConsumptionByMonth(PageRequest.of(0, 10));
         assertThat(found).contains(
                 new MonthFuelConsumptionDto(2019, 6, FuelType.TYPE_98, 201.0, 4000.0, 2000.0),
@@ -71,7 +52,7 @@ public class MonthFuelConsumptionResponseDtoJpaIntegrationTest {
     }
 
     @Test
-    public void calculateFuelConsumptionByMonthAndDriverIdentifier() {
+    public void whenInvokeCalculateFuelConsumptionByMonthAndDriverIdentifierThenExpected() {
         Page<MonthFuelConsumptionDto>  found = fuelConsumptionRepositoryJpa.calculateMonthFuelConsumptionByMonthAndDriverId(driverDtoList[1].getId(), PageRequest.of(0, 10));
         assertThat(found).contains(
                 new MonthFuelConsumptionDto(2019, 6, FuelType.TYPE_98, 100.5, 2000.0, 2000.0),
@@ -82,11 +63,46 @@ public class MonthFuelConsumptionResponseDtoJpaIntegrationTest {
 
     @After
     public void tearDown() throws Exception {
-        for(FuelConsumptionDto fuelConsumptionDto: fuelConsumptionDtoList) {
-            entityManager.remove(fuelConsumptionDto);
+        removeFuelConsumptions();
+        removeDrivers();
+    }
+
+    private void saveDrivers() {
+        driverDtoList = new DriverDto[]{
+                new DriverDto(111111L),
+                new DriverDto(222222L)
+        };
+        for (DriverDto driverDto : driverDtoList) {
+            entityManager.persistAndFlush(driverDto);
         }
+    }
+
+    private void removeDrivers() {
         for(DriverDto driverDto: driverDtoList){
             entityManager.remove(driverDto);
+        }
+        entityManager.flush();
+    }
+
+    private void saveFuelConsumptions() {
+        fuelConsumptionDtoList = new FuelConsumptionDto[]{
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 100.50, 2000.0, LocalDate.of(2019, 7, 1)),
+                new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_D, 300.50, 4000.0, LocalDate.of(2019, 7, 2)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_D, 100.50, 2000.0, LocalDate.of(2019, 7, 2)),
+                new FuelConsumptionDto(driverDtoList[1], FuelType.TYPE_95, 300.50, 4000.0, LocalDate.of(2019, 6, 1))};
+
+        for (FuelConsumptionDto fuelConsumptionDto : fuelConsumptionDtoList) {
+            entityManager.persistAndFlush(fuelConsumptionDto);
+        }
+    }
+
+    private void removeFuelConsumptions() {
+        for(FuelConsumptionDto fuelConsumptionDto: fuelConsumptionDtoList) {
+            entityManager.remove(fuelConsumptionDto);
         }
         entityManager.flush();
     }

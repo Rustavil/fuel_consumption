@@ -100,7 +100,7 @@ public class FuelPurchaseRegisterImplUnitTest {
     public void registrationFailWhenFuelConsumptionNotSave() {
         Long driverIdentifier = 11111L;
 
-        when(driverRepository.findByIdentifier(eq(driverIdentifier))).thenReturn(new Driver());
+        when(driverRepository.findByIdentifier(eq(driverIdentifier))).thenReturn(new Driver(11111L));
         when(fuelConsumptionRepository.save(anyListOf(FuelConsumption.class))).thenThrow(BaseException.class);
 
         try {

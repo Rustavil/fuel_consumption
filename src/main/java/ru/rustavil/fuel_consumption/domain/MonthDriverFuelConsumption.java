@@ -1,24 +1,32 @@
 package ru.rustavil.fuel_consumption.domain;
 
+import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class MonthDriverFuelConsumption {
 
-    private LocalDate date;
-    private Long driverIdentifier;
-    private FuelType fuelType;
-    private Double fuelVolume;
-    private Double fuelPrice;
+    private final LocalDate date;
+    private final Long driverIdentifier;
+    private final FuelType fuelType;
+    private final Double fuelVolume;
+    private final BigDecimal fuelPrice;
 
-    public MonthDriverFuelConsumption() {
-    }
-
-    public MonthDriverFuelConsumption(int year, int mont, Long driverIdentifier, FuelType fuelType, Double fuelVolume, Double fuelPrice) {
+    public MonthDriverFuelConsumption(
+            int year, int mont, Long driverIdentifier, FuelType fuelType,
+            Double fuelVolume, BigDecimal fuelPrice) {
         this.date = LocalDate.of(year, mont, 1);
         this.driverIdentifier = driverIdentifier;
         this.fuelType = fuelType;
+        if (fuelVolume < 0) {
+            throw new InvalidException("Total fuel volume must not be negative");
+        }
         this.fuelVolume = fuelVolume;
+        if (fuelPrice.compareTo(BigDecimal.ZERO) < 0 ) {
+            throw new InvalidException("Total fuel price must not be negative");
+        }
         this.fuelPrice = fuelPrice;
     }
 
@@ -26,40 +34,20 @@ public class MonthDriverFuelConsumption {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public Long getDriverIdentifier() {
         return driverIdentifier;
-    }
-
-    public void setDriverIdentifier(Long driverIdentifier) {
-        this.driverIdentifier = driverIdentifier;
     }
 
     public FuelType getFuelType() {
         return fuelType;
     }
 
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
-    }
-
     public Double getFuelVolume() {
         return fuelVolume;
     }
 
-    public void setFuelVolume(Double fuelVolume) {
-        this.fuelVolume = fuelVolume;
-    }
-
-    public Double getFuelPrice() {
+    public BigDecimal getFuelPrice() {
         return fuelPrice;
-    }
-
-    public void setFuelPrice(Double fuelPrice) {
-        this.fuelPrice = fuelPrice;
     }
 
     @Override
@@ -76,6 +64,7 @@ public class MonthDriverFuelConsumption {
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, driverIdentifier, fuelType, fuelVolume, fuelPrice);
+        return Objects.hash(date, driverIdentifier,
+                fuelType, fuelVolume, fuelPrice);
     }
 }

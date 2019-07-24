@@ -1,33 +1,29 @@
 package ru.rustavil.fuel_consumption.domain;
 
+import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class MonthMoneyConsumption {
 
-    private LocalDate date;
-    private double value;
+    private final LocalDate date;
+    private final BigDecimal money;
 
-    public MonthMoneyConsumption() {
-    }
-
-    public MonthMoneyConsumption(LocalDate date, double value) {
+    public MonthMoneyConsumption(LocalDate date,
+                                 BigDecimal money) {
         this.date = date;
-        this.value = value;
+        if (money.compareTo(BigDecimal.ZERO) < 0){
+            throw new InvalidException("Money consumption must not be negative");
+        }
+        this.money = money;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
+    public BigDecimal getMoney() {
+        return money;
     }
 }

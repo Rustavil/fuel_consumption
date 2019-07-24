@@ -36,6 +36,31 @@ public class MonthMoneyConsumptionResponseDtoJpaIntegrationTest {
         assertThat(entityManager).isNotNull();
         assertThat(fuelConsumptionRepositoryJpa).isNotNull();
 
+        saveDrivers();
+        saveFuelConsumptions();
+    }
+
+    @Test
+    public void whenInvokeCalculateMonthsMoneyConsumptionByDriverIdentifierThenExpected() {
+        Page<MonthMoneyConsumptionDto> got = fuelConsumptionRepositoryJpa.calculateMonthsMoneyConsumptionByDriverId(driverDtoList[0].getId(), PageRequest.of(0, 2));
+        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, 4000),
+                new MonthMoneyConsumptionDto(2019,7, 6000));
+    }
+
+    @Test
+    public void whenInvokeCalculateMonthsMoneyConsumptionByThenExpected() {
+        Page<MonthMoneyConsumptionDto> got = fuelConsumptionRepositoryJpa.calculateMonthsMoneyConsumption(PageRequest.of(0, 2));
+        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, 12000),
+                new MonthMoneyConsumptionDto(2019,7, 8000));
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        removeFuelConsumptions();
+        removeDrivers();
+    }
+
+    private void saveDrivers() {
         driverDtoList = new DriverDto[]{
                 new DriverDto(111111L),
                 new DriverDto(222222L)
@@ -43,6 +68,16 @@ public class MonthMoneyConsumptionResponseDtoJpaIntegrationTest {
         for (DriverDto driverDto : driverDtoList) {
             entityManager.persistAndFlush(driverDto);
         }
+    }
+
+    private void removeDrivers() {
+        for(DriverDto driverDto: driverDtoList){
+            entityManager.remove(driverDto);
+        }
+        entityManager.flush();
+    }
+
+    private void saveFuelConsumptions() {
         fuelConsumptionDtoList = new FuelConsumptionDto[]{
                 new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
                 new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
@@ -58,27 +93,9 @@ public class MonthMoneyConsumptionResponseDtoJpaIntegrationTest {
         }
     }
 
-    @Test
-    public void calculateMonthsMoneyConsumptionByDriverIdentifier() {
-        Page<MonthMoneyConsumptionDto> got = fuelConsumptionRepositoryJpa.calculateMonthsMoneyConsumptionByDriverId(driverDtoList[0].getId(), PageRequest.of(0, 2));
-        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, 4000),
-                new MonthMoneyConsumptionDto(2019,7, 6000));
-    }
-
-    @Test
-    public void calculateMonthsMoneyConsumptionBy() {
-        Page<MonthMoneyConsumptionDto> got = fuelConsumptionRepositoryJpa.calculateMonthsMoneyConsumption(PageRequest.of(0, 2));
-        assertThat(got).contains(new MonthMoneyConsumptionDto(2019,6, 12000),
-                new MonthMoneyConsumptionDto(2019,7, 8000));
-    }
-
-    @After
-    public void tearDown() throws Exception {
+    private void removeFuelConsumptions() {
         for(FuelConsumptionDto fuelConsumptionDto: fuelConsumptionDtoList) {
             entityManager.remove(fuelConsumptionDto);
-        }
-        for(DriverDto driverDto: driverDtoList){
-            entityManager.remove(driverDto);
         }
         entityManager.flush();
     }

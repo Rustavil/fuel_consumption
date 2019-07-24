@@ -1,22 +1,19 @@
 package ru.rustavil.fuel_consumption.domain;
 
+import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
+
 import java.util.UUID;
 
 public class Driver {
 
-    private UUID id;
-    private Long identifier;
-
-    public Driver() {
-        this.id = UUID.randomUUID();
-    }
-
-    public Driver(UUID id) {
-        this.id = id;
-    }
+    private final UUID id;
+    private final Long identifier;
 
     public Driver(Long identifier) {
         this.id = UUID.randomUUID();
+        if (identifier <= 0) {
+            throw new InvalidException("Driver identifier must be positive");
+        }
         this.identifier = identifier;
     }
 
@@ -24,15 +21,8 @@ public class Driver {
         return id;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
     public Long getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(Long identifier) {
-        this.identifier = identifier;
-    }
 }

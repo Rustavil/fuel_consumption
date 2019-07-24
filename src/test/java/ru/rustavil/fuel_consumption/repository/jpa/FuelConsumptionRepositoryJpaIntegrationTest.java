@@ -33,6 +33,36 @@ public class FuelConsumptionRepositoryJpaIntegrationTest {
         assertThat(entityManager).isNotNull();
         assertThat(fuelConsumptionRepositoryJpa).isNotNull();
 
+        saveDrivers();
+        saveFuelConsumptions();
+    }
+
+    @Test
+    public void whenSaveNewValidFuelConsumptionThenExpected(){
+        DriverDto expectedDriver = driverDtoList[0];
+        FuelConsumptionDto expectedFuelConsumption = new FuelConsumptionDto(
+                expectedDriver, FuelType.TYPE_95, 200.0, 2000.0);
+
+        fuelConsumptionRepositoryJpa.save(expectedFuelConsumption);
+
+        try {
+            FuelConsumptionDto found = fuelConsumptionRepositoryJpa.getOne(
+                    expectedFuelConsumption.getId());
+
+            assertThat(found).isEqualTo(expectedFuelConsumption);
+        } finally {
+            entityManager.remove(expectedFuelConsumption);
+            entityManager.flush();
+        }
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        removeFuelConsumptions();
+        removeDrivers();
+    }
+
+    private void saveDrivers() {
         driverDtoList = new DriverDto[]{
                 new DriverDto(111111L),
                 new DriverDto(222222L)
@@ -40,6 +70,16 @@ public class FuelConsumptionRepositoryJpaIntegrationTest {
         for (DriverDto driverDto : driverDtoList) {
             entityManager.persistAndFlush(driverDto);
         }
+    }
+
+    private void removeDrivers() {
+        for(DriverDto driverDto: driverDtoList){
+            entityManager.remove(driverDto);
+        }
+        entityManager.flush();
+    }
+
+    private void saveFuelConsumptions() {
         fuelConsumptionDtoList = new FuelConsumptionDto[]{
                 new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_95, 100.50, 2000.0, LocalDate.of(2019, 6, 1)),
                 new FuelConsumptionDto(driverDtoList[0], FuelType.TYPE_98, 100.50, 2000.0, LocalDate.of(2019, 6, 2)),
@@ -55,34 +95,9 @@ public class FuelConsumptionRepositoryJpaIntegrationTest {
         }
     }
 
-    @Test
-    public void save(){
-        DriverDto expectedDriver = driverDtoList[0];
-        FuelConsumptionDto expectedFuelConsumption = new FuelConsumptionDto(expectedDriver, FuelType.TYPE_95, 200.0, 2000.0);
-        expectedFuelConsumption = fuelConsumptionRepositoryJpa.save(expectedFuelConsumption);
-
-        try {
-            FuelConsumptionDto found = fuelConsumptionRepositoryJpa.getOne(expectedFuelConsumption.getId());
-
-            assertThat(found).isEqualTo(expectedFuelConsumption);
-        } finally {
-            entityManager.remove(expectedFuelConsumption);
-            entityManager.flush();
-        }
-    }
-
-    @Test
-    public void findAllByMonth(){
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
+    private void removeFuelConsumptions() {
         for(FuelConsumptionDto fuelConsumptionDto: fuelConsumptionDtoList) {
             entityManager.remove(fuelConsumptionDto);
-        }
-        for(DriverDto driverDto: driverDtoList){
-            entityManager.remove(driverDto);
         }
         entityManager.flush();
     }

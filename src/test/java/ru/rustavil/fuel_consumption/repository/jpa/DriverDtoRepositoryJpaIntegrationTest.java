@@ -1,5 +1,6 @@
 package ru.rustavil.fuel_consumption.repository.jpa;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,25 +24,36 @@ public class DriverDtoRepositoryJpaIntegrationTest {
     @Autowired
     private DriverRepositoryJpa driverRepository;
 
+    private DriverDto expected;
+
     @Before
     public void setUp() throws Exception {
         assertThat(entityManager).isNotNull();
         assertThat(driverRepository).isNotNull();
+
+        saveDriver();
     }
 
     @Test
-    public void findByIdentifier() {
-        DriverDto expected = new DriverDto(111111L);
+    public void whenSearchDriverByIdentifierThenExpected() {
+        DriverDto found = driverRepository.findByIdentifier(expected.getIdentifier());
+
+        assertThat(found).isEqualTo(expected);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        removeDriver();
+    }
+
+    private void saveDriver() {
+        expected = new DriverDto(111111L);
         entityManager.persist(expected);
         entityManager.flush();
+    }
 
-        try {
-            DriverDto found = driverRepository.findByIdentifier(expected.getIdentifier());
-
-            assertThat(found).isEqualTo(expected);
-        } finally {
-            entityManager.remove(expected);
-            entityManager.flush();
-        }
+    private void removeDriver() {
+        entityManager.remove(expected);
+        entityManager.flush();
     }
 }

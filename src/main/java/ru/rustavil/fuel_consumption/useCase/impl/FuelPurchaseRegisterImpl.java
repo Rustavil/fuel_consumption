@@ -41,7 +41,6 @@ public class FuelPurchaseRegisterImpl implements FuelPurchaseRegister {
             fuelConsumptionList.add(new FuelConsumption(driver, fuelConsumptionRequestDto.getFuelType(), fuelConsumptionRequestDto.getFuelVolume(), fuelConsumptionRequestDto.getFuelPrice()));
         }
         FuelPurchase fuelPurchase = new FuelPurchase(fuelConsumptionList);
-        fuelPurchase.IsCanRegister();
         fuelConsumptionRepository.save(fuelPurchase.getFuelConsumptionList());
         Notification notification = new FuelPurchaseNotification(fuelPurchase.getTotalFuelVolume(), fuelPurchase.getFuelVolumeMap(), fuelPurchase.getTotalPrice().doubleValue());
         notificationSender.sendFuelPurchaseNotice(notification);//todo use event listener after async method

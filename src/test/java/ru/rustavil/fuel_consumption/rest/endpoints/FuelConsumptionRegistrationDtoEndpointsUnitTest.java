@@ -51,7 +51,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void registrySuccess() throws Exception {
+    public void whenRegisteredValidFuelConsumptionThenExpected() throws Exception {
         doNothing().when(register).registerPurchase(any(FuelPurchaseRequestDto.class));
 
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
@@ -67,7 +67,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void registryFailWhenDriverNotFound() throws Exception {
+    public void whenRegisteredFuelConsumptionAndDriverNotFoundThenExpected() throws Exception {
         doThrow(new ResourceNotFoundException("Driver not found")).when(register).registerPurchase(any(FuelPurchaseRequestDto.class));
 
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
@@ -85,7 +85,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void registryFailWhenInvalidFuelVolume() throws Exception {
+    public void whenRegisteredFuelConsumptionAndFuelVolumeInvalidThenExpected() throws Exception {
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, -100.0, BigDecimal.valueOf(-200.0)
         );
@@ -105,7 +105,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void registryFail() throws Exception {
+    public void whenRegisteredFuelConsumptionAndHappenedInternalExceptionThenExpected() throws Exception {
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, 100.0, BigDecimal.valueOf(200.0)
         );
@@ -123,7 +123,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void registryBulkSuccess() throws Exception {
+    public void whenRegisteredValidFuelConsumptionBulkFileThenExpected() throws Exception {
         doNothing().when(register).registerPurchase(any(FuelPurchaseRequestDto.class));
 
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
@@ -138,7 +138,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void registryBulkFailWhenInvalidFuelVolume() throws Exception {
+    public void whenRegisteredInvalidFuelConsumptionBulkFileThenExpected() throws Exception {
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, -100.0, BigDecimal.valueOf(-200.0)
         );

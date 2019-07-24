@@ -1,24 +1,35 @@
 package ru.rustavil.fuel_consumption.domain;
 
+import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class MonthFuelConsumption {
 
-    private LocalDate date;
-    private FuelType fuelType;
-    private Double fuelVolume;
-    private Double totalFuelPrice;
-    private Double avgFuelPrice;
+    private final LocalDate date;
+    private final FuelType fuelType;
+    private final Double fuelVolume;
+    private final BigDecimal totalFuelPrice;
+    private final BigDecimal avgFuelPrice;
 
-    public MonthFuelConsumption() {
-    }
-
-    public MonthFuelConsumption(int year, int mont, FuelType fuelType, Double fuelVolume, Double totalFuelPrice, Double avgFuelPrice) {
+    public MonthFuelConsumption(int year, int mont,
+                                FuelType fuelType, Double fuelVolume,
+                                BigDecimal totalFuelPrice, BigDecimal avgFuelPrice) {
         this.date = LocalDate.of(year, mont, 1);
         this.fuelType = fuelType;
+        if (fuelVolume < 0) {
+            throw new InvalidException("Fuel volume must not be negative");
+        }
         this.fuelVolume = fuelVolume;
+        if (totalFuelPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidException("Total fuel price must not be negative");
+        }
         this.totalFuelPrice = totalFuelPrice;
+        if (avgFuelPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidException("Fuel avg price must not be negative");
+        }
         this.avgFuelPrice = avgFuelPrice;
     }
 
@@ -26,39 +37,19 @@ public class MonthFuelConsumption {
         return date;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public FuelType getFuelType() {
         return fuelType;
-    }
-
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
     }
 
     public Double getFuelVolume() {
         return fuelVolume;
     }
 
-    public void setFuelVolume(Double fuelVolume) {
-        this.fuelVolume = fuelVolume;
-    }
-
-    public Double getTotalFuelPrice() {
+    public BigDecimal getTotalFuelPrice() {
         return totalFuelPrice;
     }
 
-    public void setTotalFuelPrice(Double totalFuelPrice) {
-        this.totalFuelPrice = totalFuelPrice;
-    }
-
-    public Double getAvgFuelPrice() {
+    public BigDecimal getAvgFuelPrice() {
         return avgFuelPrice;
-    }
-
-    public void setAvgFuelPrice(Double avgFuelPrice) {
-        this.avgFuelPrice = avgFuelPrice;
     }
 }

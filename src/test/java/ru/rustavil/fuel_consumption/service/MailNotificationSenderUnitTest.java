@@ -62,7 +62,7 @@ public class MailNotificationSenderUnitTest {
     }
 
     @Test
-    public void sendMail() {
+    public void whenInvokeSendMailThenExpected() {
         Notification notification = new FuelPurchaseNotification(10.0, new HashMap<>(), 10.5);
         mailNotificationSender.sendFuelPurchaseNotice(notification);
 
