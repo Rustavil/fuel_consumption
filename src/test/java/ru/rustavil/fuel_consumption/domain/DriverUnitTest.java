@@ -7,11 +7,11 @@ public class DriverUnitTest {
 
     @Test
     public void whenCreateValidDriverThenExpectedSuccess() {
-        new Driver(1000L);
+        Driver.builder().identifier(1000L).build();
     }
 
     @Test(expected = InvalidException.class)
     public void whenCreateDriverWithNegativeDriverIdentifierThenExpected() {
-        new Driver(-1000L);
+        Driver.builder().identifier(-1000L).build();
     }
 }

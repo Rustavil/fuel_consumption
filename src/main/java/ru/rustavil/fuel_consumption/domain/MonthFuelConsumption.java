@@ -1,11 +1,19 @@
 package ru.rustavil.fuel_consumption.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Builder
+@Getter
+@AllArgsConstructor
+@EqualsAndHashCode
 public class MonthFuelConsumption {
 
     private final LocalDate date;
@@ -33,23 +41,25 @@ public class MonthFuelConsumption {
         this.avgFuelPrice = avgFuelPrice;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public static MonthFuelConsumptionBuilder builder() {
+        return new ValidateMonthFuelConsumptionBuilder();
     }
 
-    public FuelType getFuelType() {
-        return fuelType;
-    }
+    private static class ValidateMonthFuelConsumptionBuilder extends MonthFuelConsumptionBuilder {
 
-    public Double getFuelVolume() {
-        return fuelVolume;
-    }
+        @Override
+        public MonthFuelConsumption build() {
+            if (super.fuelVolume < 0) {
+                throw new InvalidException("Fuel volume must not be negative");
+            }
+            if (super.totalFuelPrice.compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvalidException("Total fuel price must not be negative");
+            }
+            if (super.avgFuelPrice.compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvalidException("Fuel avg price must not be negative");
+            }
+            return super.build();
+        }
 
-    public BigDecimal getTotalFuelPrice() {
-        return totalFuelPrice;
-    }
-
-    public BigDecimal getAvgFuelPrice() {
-        return avgFuelPrice;
     }
 }

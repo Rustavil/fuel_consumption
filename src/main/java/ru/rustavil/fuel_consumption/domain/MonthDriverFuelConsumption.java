@@ -1,11 +1,18 @@
 package ru.rustavil.fuel_consumption.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
+@Builder
+@Getter
+@AllArgsConstructor
+@EqualsAndHashCode
 public class MonthDriverFuelConsumption {
 
     private final LocalDate date;
@@ -30,41 +37,22 @@ public class MonthDriverFuelConsumption {
         this.fuelPrice = fuelPrice;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public static MonthDriverFuelConsumptionBuilder builder() {
+        return new ValidateMonthDriverFuelConsumptionBuilder();
     }
 
-    public Long getDriverIdentifier() {
-        return driverIdentifier;
-    }
+    private static class ValidateMonthDriverFuelConsumptionBuilder extends MonthDriverFuelConsumptionBuilder {
 
-    public FuelType getFuelType() {
-        return fuelType;
-    }
+        @Override
+        public MonthDriverFuelConsumption build() {
+            if (super.fuelVolume < 0) {
+                throw new InvalidException("Total fuel volume must not be negative");
+            }
+            if (super.fuelPrice.compareTo(BigDecimal.ZERO) < 0 ) {
+                throw new InvalidException("Total fuel price must not be negative");
+            }
+            return super.build();
+        }
 
-    public Double getFuelVolume() {
-        return fuelVolume;
-    }
-
-    public BigDecimal getFuelPrice() {
-        return fuelPrice;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MonthDriverFuelConsumption that = (MonthDriverFuelConsumption) o;
-        return Objects.equals(date, that.date) &&
-                Objects.equals(driverIdentifier, that.driverIdentifier) &&
-                fuelType == that.fuelType &&
-                Objects.equals(fuelVolume, that.fuelVolume) &&
-                Objects.equals(fuelPrice, that.fuelPrice);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, driverIdentifier,
-                fuelType, fuelVolume, fuelPrice);
     }
 }

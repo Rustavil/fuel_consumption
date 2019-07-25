@@ -8,6 +8,6 @@ import java.util.UUID;
 public interface MonthMoneyConsumptionReport {
 
     List<MonthMoneyConsumption> load(int pgae, int size);
-    List<MonthMoneyConsumption> loadByDriverId(UUID driverId, int pgae, int size);
+    List<MonthMoneyConsumption> load(UUID driverId, int pgae, int size);
 
 }

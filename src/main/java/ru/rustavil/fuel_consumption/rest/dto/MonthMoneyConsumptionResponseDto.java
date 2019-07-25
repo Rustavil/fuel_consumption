@@ -1,8 +1,11 @@
 package ru.rustavil.fuel_consumption.rest.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 public class MonthMoneyConsumptionResponseDto {
 
     private LocalDate date;
@@ -13,22 +16,6 @@ public class MonthMoneyConsumptionResponseDto {
 
     public MonthMoneyConsumptionResponseDto(LocalDate date, BigDecimal money) {
         this.date = date;
-        this.money = money;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public BigDecimal getMoney() {
-        return money;
-    }
-
-    public void setMoney(BigDecimal money) {
         this.money = money;
     }
 }

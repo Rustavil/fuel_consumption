@@ -7,23 +7,23 @@ import java.math.BigDecimal;
 
 public class FuelConsumptionUnitTest {
 
-    @Test(expected = InvalidException.class)
+    @Test
     public void whenCreateValidFuelConsumptionThenExpectedSuccess(){
-        new FuelConsumption(null, FuelType.TYPE_95, 1000.0, BigDecimal.valueOf(1000L));
+        FuelConsumption.builder().driver(Driver.builder().identifier(11111L).build()).fuelType(FuelType.TYPE_95).fuelVolume(1000.0).fuelPrice(BigDecimal.valueOf(1000L)).build();
     }
 
     @Test(expected = InvalidException.class)
     public void whenCreateFuelConsumptionWithoutDriverThenExpected(){
-        new FuelConsumption(null, FuelType.TYPE_95, 1000.0, BigDecimal.valueOf(1000L));
+        FuelConsumption.builder().fuelType(FuelType.TYPE_95).fuelVolume(1000.0).fuelPrice(BigDecimal.valueOf(1000L)).build();
     }
 
     @Test(expected = InvalidException.class)
     public void whenCreateFuelConsumptionWithNegativeFuelVolumeThenExpected(){
-        new FuelConsumption(new Driver(11111L), FuelType.TYPE_95, -1000.0, BigDecimal.valueOf(1000L));
+        FuelConsumption.builder().driver(Driver.builder().identifier(11111L).build()).fuelType(FuelType.TYPE_95).fuelVolume(-1000.0).fuelPrice(BigDecimal.valueOf(1000L)).build();
     }
 
     @Test(expected = InvalidException.class)
     public void whenCreateFuelConsumptionWithNegativeFuelPriceThenExpected(){
-        new FuelConsumption(new Driver(11111L), FuelType.TYPE_95, 1000.0, BigDecimal.valueOf(-1000L));
+        FuelConsumption.builder().driver(Driver.builder().identifier(11111L).build()).fuelType(FuelType.TYPE_95).fuelVolume(1000.0).fuelPrice(BigDecimal.valueOf(-1000L)).build();
     }
 }

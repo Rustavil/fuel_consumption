@@ -33,6 +33,6 @@ public class MonthFuelConsumptionEndpoint {
     public ResponseEntity<List<MonthFuelConsumptionResponseDto>> monthMoneyConsumptionDtoResponseEntityByDriver(@PathVariable("id") UUID driverId,
                                                                                                                 @RequestParam(value = "page", defaultValue = "10") int page,
                                                                                                                 @RequestParam(value = "size", defaultValue = "10") int size) {
-        return ResponseEntity.ok(mapper.from(monthFuelConsumptionReport.loadByDriverId(driverId, page, size)));
+        return ResponseEntity.ok(mapper.from(monthFuelConsumptionReport.load(driverId, page, size)));
     }
 }

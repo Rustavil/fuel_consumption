@@ -16,26 +16,56 @@ public class FuelPurchaseUnitTest {
     @Before
     public void setUp() throws Exception {
         fuelConsumptionList = Arrays.asList(
-                new FuelConsumption(new Driver(11111L), FuelType.TYPE_D, 10.0, BigDecimal.valueOf(20.0)),
-                new FuelConsumption(new Driver(11111L), FuelType.TYPE_D, 15.0, BigDecimal.valueOf(25.0)),
-                new FuelConsumption(new Driver(11111L), FuelType.TYPE_95, 15.0, BigDecimal.valueOf(25.0)),
-                new FuelConsumption(new Driver(11111L), FuelType.TYPE_98, 15.0, BigDecimal.valueOf(25.0)));
+                FuelConsumption.builder().
+                        driver(Driver.builder().identifier(11111L).build()).
+                        fuelType(FuelType.TYPE_D).
+                        fuelVolume(10.0).
+                        fuelPrice(BigDecimal.valueOf(20.0)).
+                        build(),
+
+                FuelConsumption.builder().
+                        driver(Driver.builder().identifier(11111L).build()).
+                        fuelType(FuelType.TYPE_D).
+                        fuelVolume(15.0).
+                        fuelPrice(BigDecimal.valueOf(25.0)).
+                        build(),
+
+                FuelConsumption.builder().
+                        driver(Driver.builder().identifier(11111L).build()).
+                        fuelType(FuelType.TYPE_95).
+                        fuelVolume(15.0).
+                        fuelPrice(BigDecimal.valueOf(25.0)).
+                        build(),
+
+                FuelConsumption.builder().
+                        driver(Driver.builder().identifier(11111L).build()).
+                        fuelType(FuelType.TYPE_98).
+                        fuelVolume(15.0).
+                        fuelPrice(BigDecimal.valueOf(25.0)).
+                        build());
     }
 
     @Test
-    public void whenCreateValidFuelPurchaseThenExpectedSuccess(){
-        new FuelPurchase(new FuelConsumption(new Driver(11111L), FuelType.TYPE_98, 15.0, BigDecimal.valueOf(25.0)));
-        new FuelPurchase(Collections.singletonList(new FuelConsumption(new Driver(11111L), FuelType.TYPE_98, 15.0, BigDecimal.valueOf(25.0))));
+    public void whenCreateValidFuelPurchaseThenExpectedSuccess() {
+        new FuelPurchase(
+                Collections.singletonList(
+                        FuelConsumption.builder().
+                                driver(Driver.builder().identifier(11111L).build()).
+                                fuelType(FuelType.TYPE_98).
+                                fuelVolume(15.0).
+                                fuelPrice(BigDecimal.valueOf(25.0)).
+                                build()));
+        new FuelPurchase(Collections.singletonList(
+                FuelConsumption.builder().
+                        driver(Driver.builder().identifier(11111L).build()).
+                        fuelType(FuelType.TYPE_98).
+                        fuelVolume(15.0).
+                        fuelPrice(BigDecimal.valueOf(25.0)).
+                        build()));
     }
 
     @Test(expected = InvalidException.class)
-    public void whenCreateFuelPurchaseWithNullThenExpectedSuccess(){
-        FuelConsumption fuelConsumption = null;
-        new FuelPurchase(fuelConsumption);
-    }
-
-    @Test(expected = InvalidException.class)
-    public void whenCreateFuelPurchaseWithEmptyListThenExpectedSuccess(){
+    public void whenCreateFuelPurchaseWithEmptyListThenExpectedSuccess() {
         new FuelPurchase(new LinkedList<>());
     }
 
@@ -48,7 +78,7 @@ public class FuelPurchaseUnitTest {
     @Test
     public void whenInvokeGetFuelVolumeMapThanExpected() {
         FuelPurchase fuelPurchase = new FuelPurchase(this.fuelConsumptionList);
-        assertThat(fuelPurchase.getFuelVolumeMap()).isEqualTo(new HashMap<FuelType, Double>(){
+        assertThat(fuelPurchase.getFuelVolumeMap()).isEqualTo(new HashMap<FuelType, Double>() {
             {
                 put(FuelType.TYPE_D, 25.0);
                 put(FuelType.TYPE_95, 15.0);

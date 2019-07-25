@@ -63,10 +63,10 @@ public class FuelPurchaseRegisterImplUnitTest {
     }
 
     @Test
-    public void registrationSuccess() {
+    public void whenValidFuelPurchaseRegistrationThenExpected() {
         Long driverIdentifier = 11111L;
 
-        when(driverRepository.findByIdentifier(eq(driverIdentifier))).thenReturn(new Driver(driverIdentifier));
+        when(driverRepository.findByIdentifier(eq(driverIdentifier))).thenReturn(Driver.builder().identifier(driverIdentifier).build());
 
         fuelPurchaseRegister.registerPurchase(new FuelPurchaseRequestDto(Arrays.asList(
                 new FuelConsumptionRequestDto(LocalDate.now(), driverIdentifier, FuelType.TYPE_95, 10.0, BigDecimal.valueOf(10.0)),
@@ -79,7 +79,7 @@ public class FuelPurchaseRegisterImplUnitTest {
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void registrationFailWhenDriverNotFound() {
+    public void whenFuelPurchaseRegistrationAndDriverNotFoundThenExpected() {
         Long driverIdentifier = 11111L;
 
         when(driverRepository.findByIdentifier(eq(driverIdentifier))).thenThrow(ResourceNotFoundException.class);
@@ -97,10 +97,10 @@ public class FuelPurchaseRegisterImplUnitTest {
     }
 
     @Test(expected = BaseException.class)
-    public void registrationFailWhenFuelConsumptionNotSave() {
+    public void whenFuelPurchaseRegistrationSaveErrorThenExpected() {
         Long driverIdentifier = 11111L;
 
-        when(driverRepository.findByIdentifier(eq(driverIdentifier))).thenReturn(new Driver(11111L));
+        when(driverRepository.findByIdentifier(eq(driverIdentifier))).thenReturn(Driver.builder().identifier(11111L).build());
         when(fuelConsumptionRepository.save(anyListOf(FuelConsumption.class))).thenThrow(BaseException.class);
 
         try {

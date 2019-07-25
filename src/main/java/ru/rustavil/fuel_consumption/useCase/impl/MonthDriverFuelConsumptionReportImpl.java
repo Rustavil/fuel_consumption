@@ -1,6 +1,6 @@
 package ru.rustavil.fuel_consumption.useCase.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rustavil.fuel_consumption.domain.Driver;
 import ru.rustavil.fuel_consumption.domain.MonthDriverFuelConsumption;
@@ -13,16 +13,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class MonthDriverFuelConsumptionReportImpl implements MonthDriverFuelConsumptionReport {
 
     private final MonthDriverFuelRepository repository;
     private final DriverRepository driverRepository;
-
-    @Autowired
-    public MonthDriverFuelConsumptionReportImpl(MonthDriverFuelRepository repository, DriverRepository driverRepository) {
-        this.repository = repository;
-        this.driverRepository = driverRepository;
-    }
 
     @Override
     public List<MonthDriverFuelConsumption> load(LocalDate month, int page, int size) {

@@ -1,10 +1,16 @@
 package ru.rustavil.fuel_consumption.domain;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import ru.rustavil.fuel_consumption.domain.exceptions.InvalidException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Builder
+@Getter
+@EqualsAndHashCode
 public class MonthMoneyConsumption {
 
     private final LocalDate date;
@@ -19,11 +25,19 @@ public class MonthMoneyConsumption {
         this.money = money;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public static MonthMoneyConsumptionBuilder builder() {
+        return new ValidateMonthMoneyConsumptionBuilder();
     }
 
-    public BigDecimal getMoney() {
-        return money;
+    private static class ValidateMonthMoneyConsumptionBuilder extends MonthMoneyConsumptionBuilder {
+
+        @Override
+        public MonthMoneyConsumption build() {
+            if (super.money.compareTo(BigDecimal.ZERO) < 0){
+                throw new InvalidException("Money consumption must not be negative");
+            }
+            return super.build();
+        }
+
     }
 }

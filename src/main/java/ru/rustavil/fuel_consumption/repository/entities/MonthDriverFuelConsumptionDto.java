@@ -1,12 +1,15 @@
 package ru.rustavil.fuel_consumption.repository.entities;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.rustavil.fuel_consumption.domain.FuelType;
 
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
+@Data
+@EqualsAndHashCode
 public class MonthDriverFuelConsumptionDto {
 
     private LocalDate date;
@@ -25,62 +28,5 @@ public class MonthDriverFuelConsumptionDto {
         this.fuelType = fuelType;
         this.fuelVolume = fuelVolume;
         this.fuelPrice = fuelPrice;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Long getDriverIdentifier() {
-        return driverIdentifier;
-    }
-
-    public void setDriverIdentifier(Long driverIdentifier) {
-        this.driverIdentifier = driverIdentifier;
-    }
-
-    public FuelType getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public Double getFuelVolume() {
-        return fuelVolume;
-    }
-
-    public void setFuelVolume(Double fuelVolume) {
-        this.fuelVolume = fuelVolume;
-    }
-
-    public BigDecimal getFuelPrice() {
-        return fuelPrice;
-    }
-
-    public void setFuelPrice(BigDecimal fuelPrice) {
-        this.fuelPrice = fuelPrice;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MonthDriverFuelConsumptionDto that = (MonthDriverFuelConsumptionDto) o;
-        return Objects.equals(date, that.date) &&
-                Objects.equals(driverIdentifier, that.driverIdentifier) &&
-                fuelType == that.fuelType &&
-                Objects.equals(fuelVolume, that.fuelVolume) &&
-                Objects.equals(fuelPrice, that.fuelPrice);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, driverIdentifier, fuelType, fuelVolume, fuelPrice);
     }
 }

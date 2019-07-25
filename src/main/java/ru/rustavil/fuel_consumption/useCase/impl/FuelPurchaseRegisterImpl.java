@@ -1,6 +1,6 @@
 package ru.rustavil.fuel_consumption.useCase.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rustavil.fuel_consumption.domain.FuelPurchase;
 import ru.rustavil.fuel_consumption.domain.FuelPurchaseNotification;
@@ -19,18 +19,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FuelPurchaseRegisterImpl implements FuelPurchaseRegister {
 
     private final DriverRepository driverRepository;
     private final FuelConsumptionRepository fuelConsumptionRepository;
     private final NotificationSender notificationSender;
-
-    @Autowired
-    public FuelPurchaseRegisterImpl(DriverRepository driverRepository, FuelConsumptionRepository fuelConsumptionRepository, NotificationSender notificationSender) {
-        this.driverRepository = driverRepository;
-        this.fuelConsumptionRepository = fuelConsumptionRepository;
-        this.notificationSender = notificationSender;
-    }
 
     @Transactional
     @Override
@@ -38,7 +32,12 @@ public class FuelPurchaseRegisterImpl implements FuelPurchaseRegister {
         List<FuelConsumption> fuelConsumptionList = new LinkedList<>();
         for (FuelConsumptionRequestDto fuelConsumptionRequestDto : fuelPurchaseRequestDto.getFuelConsumptionRequestDtoList()) {
             Driver driver = driverRepository.findByIdentifier(fuelConsumptionRequestDto.getDriverIdentifier());
-            fuelConsumptionList.add(new FuelConsumption(driver, fuelConsumptionRequestDto.getFuelType(), fuelConsumptionRequestDto.getFuelVolume(), fuelConsumptionRequestDto.getFuelPrice()));
+            fuelConsumptionList.add(FuelConsumption.builder().
+                    driver(driver).
+                    fuelType(fuelConsumptionRequestDto.getFuelType()).
+                    fuelVolume(fuelConsumptionRequestDto.getFuelVolume()).
+                    fuelPrice(fuelConsumptionRequestDto.getFuelPrice()).
+                    build());
         }
         FuelPurchase fuelPurchase = new FuelPurchase(fuelConsumptionList);
         fuelConsumptionRepository.save(fuelPurchase.getFuelConsumptionList());

@@ -9,5 +9,5 @@ public interface MonthFuelConsumptionReport {
 
     List<MonthFuelConsumption> load(int page, int size);
 
-    List<MonthFuelConsumption> loadByDriverId(UUID driverId, int page, int size);
+    List<MonthFuelConsumption> load(UUID driverId, int page, int size);
 }

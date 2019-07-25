@@ -1,6 +1,6 @@
 package ru.rustavil.fuel_consumption.useCase.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.rustavil.fuel_consumption.domain.Driver;
 import ru.rustavil.fuel_consumption.domain.MonthMoneyConsumption;
@@ -12,16 +12,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class MonthMoneyConsumptionReportImpl implements MonthMoneyConsumptionReport {
 
     private final MonthMoneyConsumptionRepository moneyConsumptionRepository;
     private final DriverRepository driverRepository;
-
-    @Autowired
-    public MonthMoneyConsumptionReportImpl(MonthMoneyConsumptionRepository moneyConsumptionRepository, DriverRepository driverRepository) {
-        this.moneyConsumptionRepository = moneyConsumptionRepository;
-        this.driverRepository = driverRepository;
-    }
 
     @Override
     public List<MonthMoneyConsumption> load(int page, int size) {
@@ -29,8 +24,8 @@ public class MonthMoneyConsumptionReportImpl implements MonthMoneyConsumptionRep
     }
 
     @Override
-    public List<MonthMoneyConsumption> loadByDriverId(UUID driverId, int page, int size) {
+    public List<MonthMoneyConsumption> load(UUID driverId, int page, int size) {
         Driver driver = driverRepository.findById(driverId);
-        return moneyConsumptionRepository.loadByDriverId(driver.getId(), page, size);
+        return moneyConsumptionRepository.load(driver.getId(), page, size);
     }
 }

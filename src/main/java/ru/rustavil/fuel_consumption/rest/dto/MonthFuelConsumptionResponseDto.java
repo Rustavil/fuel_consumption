@@ -1,10 +1,12 @@
 package ru.rustavil.fuel_consumption.rest.dto;
 
+import lombok.Data;
 import ru.rustavil.fuel_consumption.domain.FuelType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 public class MonthFuelConsumptionResponseDto {
 
     private LocalDate date;
@@ -24,37 +26,5 @@ public class MonthFuelConsumptionResponseDto {
         this.fuelVolume = fuelVolume;
         this.totalFuelPrice = totalFuelPrice;
         this.avgFuelPrice = avgFuelPrice;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public FuelType getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public Double getFuelVolume() {
-        return fuelVolume;
-    }
-
-    public void setFuelVolume(Double fuelVolume) {
-        this.fuelVolume = fuelVolume;
-    }
-
-    public BigDecimal getTotalFuelPrice() {
-        return totalFuelPrice;
-    }
-
-    public void setTotalFuelPrice(BigDecimal totalFuelPrice) {
-        this.totalFuelPrice = totalFuelPrice;
     }
 }

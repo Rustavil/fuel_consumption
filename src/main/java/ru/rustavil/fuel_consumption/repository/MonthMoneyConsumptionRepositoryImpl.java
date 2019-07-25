@@ -1,6 +1,6 @@
 package ru.rustavil.fuel_consumption.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
@@ -14,16 +14,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
+@RequiredArgsConstructor
 public class MonthMoneyConsumptionRepositoryImpl implements MonthMoneyConsumptionRepository {
 
     private final MonthMoneyConsumptionMapper mapper;
     private final FuelConsumptionRepositoryJpa fuelConsumptionRepositoryJpa;
-
-    @Autowired
-    public MonthMoneyConsumptionRepositoryImpl(MonthMoneyConsumptionMapper mapper, FuelConsumptionRepositoryJpa fuelConsumptionRepositoryJpa) {
-        this.mapper = mapper;
-        this.fuelConsumptionRepositoryJpa = fuelConsumptionRepositoryJpa;
-    }
 
     @Override
     public List<MonthMoneyConsumption> load(int page, int size) {
@@ -32,7 +27,7 @@ public class MonthMoneyConsumptionRepositoryImpl implements MonthMoneyConsumptio
     }
 
     @Override
-    public List<MonthMoneyConsumption> loadByDriverId(UUID driverId, int page, int size) {
+    public List<MonthMoneyConsumption> load(UUID driverId, int page, int size) {
         Page<MonthMoneyConsumptionDto> result = fuelConsumptionRepositoryJpa.calculateMonthsMoneyConsumptionByDriverId(driverId, PageRequest.of(page, size));
         return mapper.to(result.getContent());
     }

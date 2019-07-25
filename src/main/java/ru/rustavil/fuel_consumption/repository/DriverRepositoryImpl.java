@@ -1,5 +1,6 @@
 package ru.rustavil.fuel_consumption.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Repository
+@RequiredArgsConstructor
 public class DriverRepositoryImpl implements DriverRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(DriverRepositoryImpl.class);
 
-    private DriverRepositoryJpa driverRepositoryJpa;
-    private DriverMapper mapper;
+    private final DriverRepositoryJpa driverRepositoryJpa;
+    private final DriverMapper mapper;
 
-    @Autowired
-    public DriverRepositoryImpl(DriverRepositoryJpa driverRepositoryJpa, DriverMapper mapper) {
-        this.driverRepositoryJpa = driverRepositoryJpa;
-        this.mapper = mapper;
-    }
 
     @Override
     public Driver findByIdentifier(Long identifier) {

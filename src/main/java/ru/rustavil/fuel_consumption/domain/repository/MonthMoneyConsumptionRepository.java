@@ -9,5 +9,5 @@ public interface MonthMoneyConsumptionRepository {
 
     List<MonthMoneyConsumption> load(int page, int size);
 
-    List<MonthMoneyConsumption> loadByDriverId(UUID driverId, int page, int size);
+    List<MonthMoneyConsumption> load(UUID driverId, int page, int size);
 }
