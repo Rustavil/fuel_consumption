@@ -1,6 +1,6 @@
 package ru.rustavil.fuel_consumption.rest.endpoints;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.rustavil.fuel_consumption.rest.dto.MonthFuelConsumptionResponseDto;
@@ -11,28 +11,25 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/fuel_consumption/month_fuel")
 public class MonthFuelConsumptionEndpoint {
 
     private final MonthFuelConsumptionRestMapper mapper;
-    private final MonthFuelConsumptionReport monthFuelConsumptionReport;
+    private final MonthFuelConsumptionReport report;
 
-    @Autowired
-    public MonthFuelConsumptionEndpoint(MonthFuelConsumptionRestMapper mapper, MonthFuelConsumptionReport monthFuelConsumptionReport) {
-        this.mapper = mapper;
-        this.monthFuelConsumptionReport = monthFuelConsumptionReport;
+    @GetMapping()
+    public ResponseEntity<List<MonthFuelConsumptionResponseDto>> monthMoneyConsumptionDtoResponseEntity(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ResponseEntity.ok(mapper.from(report.load(page, size)));
     }
 
-    @GetMapping(params = { "page", "size" })
-    public ResponseEntity<List<MonthFuelConsumptionResponseDto>> monthMoneyConsumptionDtoResponseEntity(@RequestParam(value = "page", defaultValue = "10") int page,
-                                                                                                        @RequestParam(value = "size", defaultValue = "10") int size) {
-        return ResponseEntity.ok(mapper.from(monthFuelConsumptionReport.load(page,size)));
-    }
-
-    @GetMapping(value = "/{id}", params = { "page", "size" })
-    public ResponseEntity<List<MonthFuelConsumptionResponseDto>> monthMoneyConsumptionDtoResponseEntityByDriver(@PathVariable("id") UUID driverId,
-                                                                                                                @RequestParam(value = "page", defaultValue = "10") int page,
-                                                                                                                @RequestParam(value = "size", defaultValue = "10") int size) {
-        return ResponseEntity.ok(mapper.from(monthFuelConsumptionReport.load(driverId, page, size)));
+    @GetMapping(value = "/{driver_id}")
+    public ResponseEntity<List<MonthFuelConsumptionResponseDto>> monthMoneyConsumptionDtoResponseEntityByDriver(
+            @PathVariable("driver_id") UUID driverId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return ResponseEntity.ok(mapper.from(report.load(driverId, page, size)));
     }
 }

@@ -29,7 +29,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(FuelConsumptionEndpoint.class)
@@ -85,7 +86,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void whenRegisteredFuelConsumptionAndFuelVolumeInvalidThenExpected() throws Exception {
+    public void whenRegisteredFuelConsumptionAndInvalidFuelVolumeThenExpected() throws Exception {
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, -100.0, BigDecimal.valueOf(-200.0)
         );
@@ -105,7 +106,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void whenRegisteredFuelConsumptionAndHappenedInternalExceptionThenExpected() throws Exception {
+    public void whenRegisteredValidFuelConsumptionAndHappenedInternalErrorThenExpected() throws Exception {
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, 100.0, BigDecimal.valueOf(200.0)
         );
@@ -138,7 +139,7 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
     }
 
     @Test
-    public void whenRegisteredInvalidFuelConsumptionBulkFileThenExpected() throws Exception {
+    public void whenRegisteredFuelConsumptionBulkFileAndFuelVolumeInvalidThenExpected() throws Exception {
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, -100.0, BigDecimal.valueOf(-200.0)
         );

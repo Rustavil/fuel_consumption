@@ -2,7 +2,7 @@ package ru.rustavil.fuel_consumption.rest.endpoints;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.rustavil.fuel_consumption.domain.exceptions.ValidationException;
@@ -19,19 +19,13 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/fuel_consumption")
 public class FuelConsumptionEndpoint {
 
     private final FuelPurchaseRegister fuelConsumptionRegistrar;
     private final ObjectMapper mapper;
     private final Validator validator;
-
-    @Autowired
-    public FuelConsumptionEndpoint(FuelPurchaseRegister fuelConsumptionRegistrar, ObjectMapper mapper, Validator validator) {
-        this.fuelConsumptionRegistrar = fuelConsumptionRegistrar;
-        this.mapper = mapper;
-        this.validator = validator;
-    }
 
     @PostMapping
     public void registry(@Valid @RequestBody FuelConsumptionRequestDto fuelConsumptionRequestDto) {
