@@ -28,7 +28,7 @@ public class FuelPurchaseRegisterImpl implements FuelPurchaseRegister {
 
     @Transactional
     @Override
-    public void registerPurchase(FuelPurchaseRequestDto fuelPurchaseRequestDto) {
+    public FuelPurchase registerPurchase(FuelPurchaseRequestDto fuelPurchaseRequestDto) {
         List<FuelConsumption> fuelConsumptionList = new LinkedList<>();
         for (FuelConsumptionRequestDto fuelConsumptionRequestDto : fuelPurchaseRequestDto.getFuelConsumptionRequestDtoList()) {
             Driver driver = driverRepository.findByIdentifier(fuelConsumptionRequestDto.getDriverIdentifier());
@@ -43,5 +43,6 @@ public class FuelPurchaseRegisterImpl implements FuelPurchaseRegister {
         fuelConsumptionRepository.save(fuelPurchase.getFuelConsumptionList());
         Notification notification = new FuelPurchaseNotification(fuelPurchase.getTotalFuelVolume(), fuelPurchase.getFuelVolumeMap(), fuelPurchase.getTotalPrice().doubleValue());
         notificationSender.sendFuelPurchaseNotice(notification);//todo use event listener after async method
+        return fuelPurchase;
     }
 }

@@ -1,5 +1,6 @@
 package ru.rustavil.fuel_consumption.rest.endpoints;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.rustavil.fuel_consumption.Application;
 import ru.rustavil.fuel_consumption.domain.FuelType;
 import ru.rustavil.fuel_consumption.domain.service.NotificationSender;
+import ru.rustavil.fuel_consumption.repository.entities.FuelConsumptionDto;
 import ru.rustavil.fuel_consumption.repository.jpa.DriverRepositoryJpa;
 import ru.rustavil.fuel_consumption.repository.jpa.FuelConsumptionRepositoryJpa;
 import ru.rustavil.fuel_consumption.rest.dto.FuelConsumptionRequestDto;
@@ -24,6 +26,8 @@ import ru.rustavil.fuel_consumption.useCase.FuelPurchaseRegister;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class FuelConsumptionEndpointIntegrationTest {
 
     @Autowired
@@ -74,7 +77,11 @@ public class FuelConsumptionEndpointIntegrationTest {
                 post("/fuel_consumption").
                         contentType(MediaType.APPLICATION_JSON).
                         content(json))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).
+                andDo(r -> {
+                    List<String> ids = objectMapper.readValue(r.getResponse().getContentAsString(), new TypeReference<List<String>>(){});
+                    ids.forEach(id -> fuelConsumptionRepository.deleteById(UUID.fromString(id)));
+                });
     }
 
     @Test
@@ -85,10 +92,15 @@ public class FuelConsumptionEndpointIntegrationTest {
                 LocalDate.now(), 11111L, FuelType.TYPE_95, 100.0, BigDecimal.valueOf(200.0)
         );
         String json = objectMapper.writeValueAsString(Collections.singletonList(fuelConsumptionRequestDto));
-        MockMultipartFile file = new MockMultipartFile("file", "file.json", MediaType.APPLICATION_JSON.toString(), json.getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "file.json",
+                MediaType.APPLICATION_JSON.toString(), json.getBytes());
 
         mvc.perform(multipart("/fuel_consumption/bulk")
                 .file(file))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).
+                andDo(r -> {
+                    List<String> ids = objectMapper.readValue(r.getResponse().getContentAsString(), new TypeReference<List<String>>(){});
+                    ids.forEach(id -> fuelConsumptionRepository.deleteById(UUID.fromString(id)));
+                });
     }
 }
