@@ -10,19 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.rustavil.fuel_consumption.Application;
 import ru.rustavil.fuel_consumption.domain.FuelType;
 import ru.rustavil.fuel_consumption.domain.service.NotificationSender;
-import ru.rustavil.fuel_consumption.repository.entities.DriverDto;
-import ru.rustavil.fuel_consumption.repository.entities.FuelConsumptionDto;
 import ru.rustavil.fuel_consumption.repository.jpa.DriverRepositoryJpa;
 import ru.rustavil.fuel_consumption.repository.jpa.FuelConsumptionRepositoryJpa;
 import ru.rustavil.fuel_consumption.rest.dto.FuelConsumptionRequestDto;
-import ru.rustavil.fuel_consumption.rest.dto.FuelPurchaseRequestDto;
 import ru.rustavil.fuel_consumption.useCase.FuelPurchaseRegister;
-import ru.rustavil.fuel_consumption.useCase.MonthDriverFuelConsumptionReport;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @AutoConfigureMockMvc
+@DirtiesContext
 public class FuelConsumptionEndpointIntegrationTest {
 
     @Autowired
