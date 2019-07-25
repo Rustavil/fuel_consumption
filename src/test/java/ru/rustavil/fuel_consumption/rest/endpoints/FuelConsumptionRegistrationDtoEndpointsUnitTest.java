@@ -12,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.rustavil.fuel_consumption.domain.Driver;
+import ru.rustavil.fuel_consumption.domain.FuelConsumption;
+import ru.rustavil.fuel_consumption.domain.FuelPurchase;
 import ru.rustavil.fuel_consumption.domain.FuelType;
 import ru.rustavil.fuel_consumption.domain.exceptions.ResourceNotFoundException;
 import ru.rustavil.fuel_consumption.rest.dto.FuelConsumptionRequestDto;
@@ -22,11 +25,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -53,7 +56,14 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
 
     @Test
     public void whenRegisteredValidFuelConsumptionThenExpected() throws Exception {
-        doNothing().when(register).registerPurchase(any(FuelPurchaseRequestDto.class));
+        when(register.registerPurchase(any(FuelPurchaseRequestDto.class))).
+                thenReturn(
+                        new FuelPurchase(new FuelConsumption(
+                                UUID.randomUUID(),
+                                Driver.builder().identifier(11111L).build(),
+                                FuelType.TYPE_95,
+                                100.0,
+                                BigDecimal.valueOf(1000.0))));
 
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, 100.0, BigDecimal.valueOf(200.0)
@@ -125,7 +135,14 @@ public class FuelConsumptionRegistrationDtoEndpointsUnitTest {
 
     @Test
     public void whenRegisteredValidFuelConsumptionBulkFileThenExpected() throws Exception {
-        doNothing().when(register).registerPurchase(any(FuelPurchaseRequestDto.class));
+        when(register.registerPurchase(any(FuelPurchaseRequestDto.class))).
+                thenReturn(
+                        new FuelPurchase(new FuelConsumption(
+                                UUID.randomUUID(),
+                                Driver.builder().identifier(11111L).build(),
+                                FuelType.TYPE_95,
+                                100.0,
+                                BigDecimal.valueOf(1000.0))));
 
         FuelConsumptionRequestDto fuelConsumptionRequestDto = new FuelConsumptionRequestDto(
                 LocalDate.now(), 11111L, FuelType.TYPE_95, 100.0, BigDecimal.valueOf(200.0)

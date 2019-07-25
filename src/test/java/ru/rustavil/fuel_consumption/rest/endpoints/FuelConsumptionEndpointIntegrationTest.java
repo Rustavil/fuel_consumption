@@ -11,13 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.rustavil.fuel_consumption.Application;
 import ru.rustavil.fuel_consumption.domain.FuelType;
 import ru.rustavil.fuel_consumption.domain.service.NotificationSender;
-import ru.rustavil.fuel_consumption.repository.entities.FuelConsumptionDto;
 import ru.rustavil.fuel_consumption.repository.jpa.DriverRepositoryJpa;
 import ru.rustavil.fuel_consumption.repository.jpa.FuelConsumptionRepositoryJpa;
 import ru.rustavil.fuel_consumption.rest.dto.FuelConsumptionRequestDto;
@@ -30,8 +28,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,8 +77,9 @@ public class FuelConsumptionEndpointIntegrationTest {
                 post("/fuel_consumption").
                         contentType(MediaType.APPLICATION_JSON).
                         content(json))
-                .andExpect(status().isOk()).
-                andDo(r -> {
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andDo(r -> {
                     List<String> ids = objectMapper.readValue(r.getResponse().getContentAsString(), new TypeReference<List<String>>(){});
                     ids.forEach(id -> fuelConsumptionRepository.deleteById(UUID.fromString(id)));
                 });
@@ -97,8 +98,9 @@ public class FuelConsumptionEndpointIntegrationTest {
 
         mvc.perform(multipart("/fuel_consumption/bulk")
                 .file(file))
-                .andExpect(status().isOk()).
-                andDo(r -> {
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andDo(r -> {
                     List<String> ids = objectMapper.readValue(r.getResponse().getContentAsString(), new TypeReference<List<String>>(){});
                     ids.forEach(id -> fuelConsumptionRepository.deleteById(UUID.fromString(id)));
                 });
