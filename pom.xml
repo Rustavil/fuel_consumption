@@ -19,7 +19,7 @@
         <java.version>1.8</java.version>
         <swgger.version>2.9.2</swgger.version>
         <mapper.version>1.3.0.Final</mapper.version>
-        <db.version>1.4.199</db.version>
+        <db.version>2.0.206</db.version>
         <lombok.version>1.18.4</lombok.version>
     </properties>
 
